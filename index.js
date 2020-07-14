@@ -11,6 +11,8 @@ function createStore (reducer) {
 
     const getState = () => state
 
+    //The store's subscribe() function helps connect React 
+    //components to the store
     const subscribe = (listener) => {
         listeners.push(listener)
         return () => {
@@ -33,8 +35,13 @@ function createStore (reducer) {
 function todos (state = [], action) {
     if (action.type === 'ADD_TODO') {
         return state.concat([action.todo])
-    } 
-    return state
+    } else if (action.type === 'REMOVE_TODO'){
+        return state.filter((todo) => todo.id !== action.id)
+    } else if (action.type === 'TOGGLE_TODO') {
+        return state.map((todo) => todo.id !== action.id ? todo : 
+            Object.assign({}, todo, { complete: !todo.complete }))
+    } else {
+        return state}
 }
 
 const store = createStore(todos)
